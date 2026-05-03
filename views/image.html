@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ID}}.{{EXT}} - Octuna Webernet Explorer</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/logo.png">
+  <meta property="og:image" content="{{URL}}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{URL}}">
+</head>
+<body>
+  <div class="browser">
+    <div class="titlebar">
+      <span>{{ID}}.{{EXT}} - Octuna Webernet Explorer</span>
+      <span class="icons"><span>_</span><span>&#9633;</span><span>X</span></span>
+    </div>
+    <div class="address">
+      <label>Address:</label>
+      <input class="url" id="addrBar" value="" readonly onclick="this.select()">
+      <button class="go" type="button" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText(addrBar.value)">Copy</button>
+    </div>
+    <div class="toolbar">
+      <img class="logo" src="/logo.png" alt="Octuna mascot">
+      <span class="brand">Octuna</span>
+      <a class="btn" href="/">&#127968; Home</a>
+      <a class="btn" href="/{{ID}}.{{EXT}}">&#128247; Direct</a>
+      <a class="btn" href="/admin">&#128274; Admin</a>
+    </div>
+
+    <div class="layout" style="grid-template-columns: 1fr;">
+      <main>
+        <div class="panel">
+          <div class="head">&#128247; {{ID}}.{{EXT}}</div>
+          <div class="body">
+            <div class="viewer">{{MEDIA}}</div>
+            <hr>
+            <table class="retro">
+              <tr><th style="width:160px">Original name</th><td>{{ORIGINAL}}</td></tr>
+              <tr><th>Size</th><td>{{SIZE}}</td></tr>
+              <tr><th>Uploaded</th><td>{{DATE}}</td></tr>
+              <tr><th>Direct URL</th><td><input value="{{URL}}" readonly onclick="this.select()" style="width:100%"></td></tr>
+              <tr><th>Share</th><td>
+                <button onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText('{{URL}}')">Copy</button>
+                <button id="shareBtn">Share</button>
+              </td></tr>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="footer">
+      <div class="links"><a href="/">Home</a> | <a href="/admin">Admin</a></div>
+      <div>Best viewed in any browsers except Netscape Navigator 4.0 or Internet Explorer 5.0, especially at 800x600 resolution!</div>
+    </div>
+    <div class="statusbar"><span>Done</span><span>&#128274; Internet</span></div>
+  </div>
+
+  <script>
+    window.OCTUNA = {{CONFIG_JSON}};
+    (function(){
+      var bar = document.getElementById('addrBar');
+      bar.value = (OCTUNA.addressBarMode === 'fixed' && OCTUNA.addressBarFixed)
+        ? OCTUNA.addressBarFixed : location.href;
+      var sb = document.getElementById('shareBtn');
+      sb.addEventListener('click', async function(){
+        var url = '{{URL}}';
+        if (navigator.share) {
+          try { await navigator.share({title:'Octuna upload', url: url}); } catch(e){}
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(url);
+          sb.textContent = 'Copied!';
+          setTimeout(function(){ sb.textContent = 'Share'; }, 1200);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

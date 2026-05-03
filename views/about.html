@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About - Octuna Webernet Explorer</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/logo.png">
+  <meta name="description" content="About Octuna — a tiny image host with a Web 1.0 skin.">
+</head>
+<body>
+  <div class="browser">
+    <div class="titlebar">
+      <span>About - Octuna Webernet Explorer</span>
+      <span class="icons"><span>_</span><span>&#9633;</span><span>X</span></span>
+    </div>
+
+    <div class="address">
+      <label>Address:</label>
+      <input class="url" id="addrBar" value="" readonly>
+      <button class="go" type="button" onclick="location.reload()">Go!</button>
+    </div>
+
+    <div class="toolbar">
+      <img class="logo" src="/logo.png" alt="Octuna mascot">
+      <span class="brand">Octuna</span>
+      <a class="btn" href="/">&#127968; Home</a>
+      <a class="btn" href="/about">&#10067; About</a>
+      <a class="btn" href="/admin">&#128274; Admin</a>
+    </div>
+
+    <div class="layout" style="grid-template-columns: 1fr;">
+      <main>
+        <div class="panel">
+          <div class="head">&#10067; About Octuna</div>
+          <div class="body docs">
+            <p><b>Octuna</b> is a tiny image host you can run on your own subdomain. It exists because every other "free" image host either started charging, started showing ads, or quietly deleted your files after a few months.</p>
+            <p>Octuna doesn't do any of that. There are no accounts, no ads, no tracking, no expiration. Upload a file, get a short URL, share it. That's the whole product.</p>
+            <p>The frontend is dressed up like a 1999 GeoCities-meets-Internet-Explorer site because it's funny and because pretending we have unlimited bandwidth and a 3D animated logo is more fun than another sterile drag-and-drop rectangle.</p>
+            <p>The backend is a single ~250-line Node script with one dependency. It uses about 20 MB of RAM. You can run it on a Raspberry Pi.</p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="footer">
+      <div class="spin3d brand-spin">Octuna</div>
+      <div class="links">
+        <a href="/">Home</a> | <a href="/about">About</a> | <a href="/admin">Admin</a>
+      </div>
+      <div>Best viewed in any browsers except Netscape Navigator 4.0 or Internet Explorer 5.0, especially at 800x600 resolution!</div>
+    </div>
+
+    <div class="statusbar">
+      <span>Done</span>
+      <span>&#128274; Internet</span>
+    </div>
+  </div>
+
+  <script>
+    window.OCTUNA = {{CONFIG_JSON}};
+    (function(){
+      var bar = document.getElementById('addrBar');
+      bar.value = (OCTUNA.addressBarMode === 'fixed' && OCTUNA.addressBarFixed)
+        ? OCTUNA.addressBarFixed : location.href;
+    })();
+  </script>
+</body>
+</html>

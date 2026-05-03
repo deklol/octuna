@@ -1,0 +1,17 @@
+{
+  "name": "i-dek-cx",
+  "version": "1.0.0",
+  "description": "Tiny imgur-style image host with a retro shell.",
+  "main": "server.js",
+  "scripts": {
+    "setup": "node setup.js",
+    "start": "node --max-old-space-size=64 server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0"
+  }
+}

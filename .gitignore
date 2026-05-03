@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Runtime data and uploads
+data/uploads/*
+!data/uploads/.gitkeep
+data/meta.json
+data/meta.db*
+
+# Local configuration with secrets
+config.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors / tooling
+.vscode/
+.idea/
+*.swp
+*~
+.claude/
+
+# Local notes
+resume.txt

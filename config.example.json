@@ -1,0 +1,21 @@
+{
+  "port": 3030,
+  "publicUrl": "http://localhost:3030",
+  "idLength": 4,
+  "maxUploadMB": 25,
+  "addressBarMode": "real",
+  "addressBarFixed": "",
+  "siteName": "Octuna",
+  "allowedTypes": [
+    "image/png",
+    "image/jpeg",
+    "image/gif",
+    "image/webp",
+    "video/mp4",
+    "video/webm"
+  ],
+  "adminUser": "",
+  "adminSalt": "",
+  "adminHash": "",
+  "sessionSecret": ""
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - Octuna Webernet Explorer</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/logo.png">
+</head>
+<body>
+  <div class="browser">
+    <div class="titlebar">
+      <span>Admin Panel - Octuna Webernet Explorer</span>
+      <span class="icons"><span>_</span><span>&#9633;</span><span>X</span></span>
+    </div>
+    <div class="address">
+      <label>Address:</label>
+      <input class="url" id="addrBar" value="" readonly>
+      <button class="go" type="button" onclick="location.reload()">Go!</button>
+    </div>
+    <div class="toolbar">
+      <img class="logo" src="/logo.png" alt="Octuna mascot">
+      <span class="brand">Octuna</span>
+      <a class="btn" href="/">&#127968; Home</a>
+      <a class="btn" href="/admin">&#128274; Admin</a>
+      <button id="logoutBtn" class="btn" type="button">Logout</button>
+      <span class="greet" id="count">&#9733; Loading...</span>
+    </div>
+
+    <div class="layout" style="grid-template-columns:1fr">
+      <main>
+        <div class="panel">
+          <div class="head">&#128193; All Files</div>
+          <div class="body">
+            <div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap">
+              <input type="text" id="search" placeholder="Filter by id or name..." style="flex:1;min-width:160px">
+              <button onclick="load()">Refresh</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="retro" id="tbl">
+                <thead>
+                  <tr>
+                    <th>Preview</th>
+                    <th>ID</th>
+                    <th>Original</th>
+                    <th>Size</th>
+                    <th>Uploaded</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rows"><tr><td colspan="6">Loading...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="footer">
+      <div class="links"><a href="/">Home</a> | <a href="/admin">Admin</a></div>
+    </div>
+    <div class="statusbar"><span id="status">Done</span><span>&#128274; Internet</span></div>
+  </div>
+
+<script>
+window.OCTUNA = {{CONFIG_JSON}};
+(function(){
+  var bar = document.getElementById('addrBar');
+  bar.value = (OCTUNA.addressBarMode === 'fixed' && OCTUNA.addressBarFixed)
+    ? OCTUNA.addressBarFixed : location.href;
+})();
+
+let all = [];
+
+async function load() {
+  document.getElementById('status').textContent = 'Loading...';
+  const r = await fetch('/admin/list');
+  if (r.status === 401) { location.href = '/'; return; }
+  all = await r.json();
+  render();
+  document.getElementById('count').textContent = '★ ' + all.length + ' files';
+  document.getElementById('status').textContent = 'Done';
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const tbody = document.getElementById('rows');
+  const list = all.filter(r =>
+    r.id.toLowerCase().includes(q) || (r.original_name || '').toLowerCase().includes(q));
+  if (list.length === 0) { tbody.innerHTML = '<tr><td colspan="6">No files.</td></tr>'; return; }
+  tbody.innerHTML = list.map(r => {
+    const url = '/' + r.id + '.' + r.ext;
+    const isImg = r.mime && r.mime.startsWith('image/');
+    const preview = isImg
+      ? '<a href="/' + r.id + '" target="_blank"><img class="thumb" src="' + url + '"></a>'
+      : '<a href="/' + r.id + '" target="_blank">[' + r.ext + ']</a>';
+    return '<tr>'
+      + '<td>' + preview + '</td>'
+      + '<td><code>' + r.id + '.' + r.ext + '</code></td>'
+      + '<td>' + escapeHtml(r.original_name || '') + '</td>'
+      + '<td>' + formatBytes(r.size) + '</td>'
+      + '<td>' + new Date(r.uploaded_at).toLocaleString() + '</td>'
+      + '<td>'
+      +   '<button onclick="rename(\'' + r.id + '\')">Rename</button> '
+      +   '<button onclick="del(\'' + r.id + '\')">Delete</button>'
+      + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+async function rename(id) {
+  const newId = prompt('New id (lowercase letters/digits, 2-16 chars):', id);
+  if (!newId || newId === id) return;
+  const r = await fetch('/admin/rename', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, newId })
+  });
+  const data = await r.json();
+  if (data.error) return alert('Error: ' + data.error);
+  load();
+}
+
+async function del(id) {
+  if (!confirm('Delete ' + id + '?')) return;
+  const r = await fetch('/admin/delete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id })
+  });
+  const data = await r.json();
+  if (data.error) return alert('Error: ' + data.error);
+  load();
+}
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  fetch('/admin/logout', { method: 'POST' }).then(() => location.href = '/');
+});
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function formatBytes(n) {
+  if (n < 1024) return n + ' B';
+  if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+  if (n < 1024 * 1024 * 1024) return (n / 1024 / 1024).toFixed(2) + ' MB';
+  return (n / 1024 / 1024 / 1024).toFixed(2) + ' GB';
+}
+
+document.getElementById('search').addEventListener('input', render);
+load();
+</script>
+</body>
+</html>

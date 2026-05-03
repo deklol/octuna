@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Octuna - Webernet Explorer</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/logo.png">
+  <meta name="description" content="Octuna — a tiny image host with a Web 1.0 skin. Drag, drop, share.">
+</head>
+<body>
+  <div class="browser">
+    <div class="titlebar">
+      <span>Octuna - Webernet Explorer</span>
+      <span class="icons"><span>_</span><span>&#9633;</span><span>X</span></span>
+    </div>
+
+    <div class="address">
+      <label>Address:</label>
+      <input class="url" id="addrBar" value="" readonly>
+      <button class="go" type="button" onclick="location.reload()">Go!</button>
+    </div>
+
+    <div class="toolbar">
+      <img class="logo" src="/logo.png" alt="Octuna mascot">
+      <span class="brand">Octuna</span>
+      <a class="btn" href="/">&#127968; Home</a>
+      <a class="btn" href="/about">&#10067; About</a>
+      <a class="btn" href="/admin">&#128274; Admin</a>
+      <span class="greet" id="greet">&#9733; Welcome, Guest!</span>
+    </div>
+
+    <div class="marquee">
+      <marquee>&#9733; Octuna - The web's coziest image host! &#9733; No signup, no ads, no tracking &#9733; Drop &middot; Drag &middot; Paste &middot; Share &#9733; Best viewed in Internet Explorer 5.0 &#9733;</marquee>
+    </div>
+
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside>
+        <div class="panel menu">
+          <div class="head">&#128193; Menu</div>
+          <ul>
+            <li>&#128194; <a href="/">Home</a></li>
+            <li>&#128194; <a href="/about">About</a></li>
+            <li>&#128194; <a href="/admin">Admin Panel</a></li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="head">&#128202; Stats</div>
+          <div class="body">
+            <div id="stats">Loading...</div>
+          </div>
+        </div>
+
+        <div class="panel" id="loginPanel">
+          <div class="head">&#128274; Admin Login</div>
+          <div class="body">
+            <form class="login-form" id="loginForm" autocomplete="off">
+              <label for="lUser">Username:</label>
+              <input type="text" id="lUser" name="user" required>
+              <label for="lPass">Password:</label>
+              <input type="password" id="lPass" name="password" required>
+              <button type="submit">Sign In</button>
+              <div class="login-msg" id="loginMsg"></div>
+            </form>
+            <div class="logged-in" id="loggedIn" style="display:none">
+              <div>Signed in as <code id="adminWho">admin</code></div>
+              <a class="button" href="/admin" style="text-decoration:none">Open Admin</a>
+              <button type="button" id="logoutBtn">Logout</button>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- Main -->
+      <main>
+        <div class="panel">
+          <div class="head">&#128247; Welcome to Octuna!</div>
+          <div class="body">
+            <div class="hero">
+              <img class="bigLogo" src="/logo.png" alt="Octuna mascot">
+              <div>
+                <h1>Octuna</h1>
+                <p>Drop a file below, paste from your clipboard, or pick one. Get a short URL you can share anywhere.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="head">&#128190; Upload</div>
+          <div class="body">
+            <div id="dropzone" class="dropzone">
+              <p><b>Drag &amp; drop file(s) here</b></p>
+              <p>or paste from clipboard (Ctrl+V)</p>
+              <p>or <button id="pickBtn" type="button">Choose File(s)...</button></p>
+              <input type="file" id="fileInput" accept="image/*,video/mp4,video/webm" multiple style="display:none">
+            </div>
+            <div class="row" style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <label for="fmt">Default copy format:</label>
+              <select id="fmt">
+                <option value="url">Direct URL</option>
+                <option value="markdown">Markdown</option>
+                <option value="html">HTML</option>
+                <option value="bbcode">BBCode</option>
+                <option value="view">View page</option>
+              </select>
+            </div>
+            <div class="results" id="results"></div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <div class="footer">
+      <div class="spin3d brand-spin">Octuna</div>
+      <div>
+        <svg class="cool-sun" viewBox="0 0 100 100" aria-hidden="true">
+          <g class="rays" stroke="#ffd700" stroke-width="4" stroke-linecap="round">
+            <line x1="50" y1="6"  x2="50" y2="18"/>
+            <line x1="50" y1="82" x2="50" y2="94"/>
+            <line x1="6"  y1="50" x2="18" y2="50"/>
+            <line x1="82" y1="50" x2="94" y2="50"/>
+            <line x1="18" y1="18" x2="27" y2="27"/>
+            <line x1="73" y1="73" x2="82" y2="82"/>
+            <line x1="82" y1="18" x2="73" y2="27"/>
+            <line x1="18" y1="82" x2="27" y2="73"/>
+          </g>
+          <circle cx="50" cy="50" r="22" fill="#ffeb3b" stroke="#000" stroke-width="2"/>
+          <rect x="32" y="46" width="14" height="7" rx="2" fill="#000"/>
+          <rect x="54" y="46" width="14" height="7" rx="2" fill="#000"/>
+          <rect x="46" y="48" width="8"  height="2" fill="#000"/>
+          <path d="M 40 60 Q 50 70 60 60" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="visitors" id="visitors">000,000,000</span>
+        <svg class="cool-sun" viewBox="0 0 100 100" aria-hidden="true">
+          <g class="rays" stroke="#ffd700" stroke-width="4" stroke-linecap="round">
+            <line x1="50" y1="6"  x2="50" y2="18"/>
+            <line x1="50" y1="82" x2="50" y2="94"/>
+            <line x1="6"  y1="50" x2="18" y2="50"/>
+            <line x1="82" y1="50" x2="94" y2="50"/>
+            <line x1="18" y1="18" x2="27" y2="27"/>
+            <line x1="73" y1="73" x2="82" y2="82"/>
+            <line x1="82" y1="18" x2="73" y2="27"/>
+            <line x1="18" y1="82" x2="27" y2="73"/>
+          </g>
+          <circle cx="50" cy="50" r="22" fill="#ffeb3b" stroke="#000" stroke-width="2"/>
+          <rect x="32" y="46" width="14" height="7" rx="2" fill="#000"/>
+          <rect x="54" y="46" width="14" height="7" rx="2" fill="#000"/>
+          <rect x="46" y="48" width="8"  height="2" fill="#000"/>
+          <path d="M 40 60 Q 50 70 60 60" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="links">
+        <a href="/">Home</a> | <a href="/about">About</a> | <a href="/admin">Admin</a>
+      </div>
+      <div>Best viewed in any browsers except Netscape Navigator 4.0 or Internet Explorer 5.0, especially at 800x600 resolution!</div>
+    </div>
+
+    <div class="statusbar">
+      <span id="status">Done</span>
+      <span>&#128274; Internet</span>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
