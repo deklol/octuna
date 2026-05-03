@@ -4,6 +4,20 @@ Self-hosted image host. A small Node.js application for uploading images and sho
 
 Octuna is intended as a self-hosted alternative to public image hosts (Imgur, ImgBB, Postimage, ImageShack) for users who want to keep their files on their own server, control their own URLs, and not rely on a third-party service that may add ads, charge a fee, or delete inactive uploads.
 
+## Screenshots
+
+Homepage:
+
+![Homepage](https://i.dek.cx/e101.png)
+
+Admin panel:
+
+![Admin](https://i.dek.cx/vnre.png)
+
+Image view page:
+
+![Image preview](https://i.dek.cx/0hcp.png)
+
 ## Features
 
 - Drag and drop, paste from clipboard, or file picker upload
