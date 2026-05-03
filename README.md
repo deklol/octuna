@@ -207,6 +207,41 @@ npm run setup
 
 Re-run any time. The new salt and hash overwrite the old ones in `config.json`. Restart the server for the change to take effect.
 
+## ShareX integration
+
+Octuna works as a ShareX custom uploader without any extra plugins or server changes. The `/upload` endpoint accepts a standard multipart POST with the file under field name `file` and returns JSON containing the public URL, which is exactly what ShareX needs.
+
+A ready-to-use config is in [`octuna.sxcu.example`](octuna.sxcu.example). Copy it, replace `YOUR.DOMAIN.HERE` with your Octuna domain, save as `octuna.sxcu`, and double-click the file. ShareX will import it and prompt you to set Octuna as the active image and file uploader.
+
+The config:
+
+```json
+{
+  "Version": "16.1.0",
+  "Name": "Octuna",
+  "DestinationType": "ImageUploader, FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://YOUR.DOMAIN.HERE/upload",
+  "Body": "MultipartFormData",
+  "FileFormName": "file",
+  "URL": "{json:url}"
+}
+```
+
+To configure manually in ShareX (Destinations, Custom uploader settings):
+
+- Method: POST
+- Request URL: `https://YOUR.DOMAIN.HERE/upload`
+- Body: Form data (multipart)
+- File form name: `file`
+- URL: `{json:url}`
+
+The same uploader works for the screenshot, image, and file destinations. After ShareX uploads, the direct image URL is placed on your clipboard.
+
+If you want a view-page URL instead of the direct file URL, set `URL` to `{json:viewUrl}`.
+
+Octuna's upload endpoint is open to anyone who can reach it. If you do not want public uploads, restrict access at the reverse proxy (allowlist your IP, basic auth, or a VPN) before exposing it.
+
 ## API
 
 | Method | Path | Auth | Notes |

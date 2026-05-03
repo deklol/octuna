@@ -1,0 +1,10 @@
+{
+  "Version": "16.1.0",
+  "Name": "Octuna",
+  "DestinationType": "ImageUploader, FileUploader",
+  "RequestMethod": "POST",
+  "RequestURL": "https://YOUR.DOMAIN.HERE/upload",
+  "Body": "MultipartFormData",
+  "FileFormName": "file",
+  "URL": "{json:url}"
+}
