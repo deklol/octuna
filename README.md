@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://i.dek.cx/b0bu.png" alt="Octuna logo" width="200">
+</p>
+
 # Octuna
 
 Self-hosted image host. A small Node.js application for uploading images and short videos and serving them at short URLs from your own domain. No accounts, no ads, no tracking, no expiration. One runtime dependency, one JSON metadata file, one folder of uploads.
